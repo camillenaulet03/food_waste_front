@@ -11,6 +11,7 @@
       <button type="submit">Login</button>
     </form>
   </div>
+  <p>Si vous n'avez pas de compte <router-link to="/register"><button>Register</button></router-link></p>
 </template>
 <script>
 
@@ -40,7 +41,7 @@ export default {
       const { user, token } = await response.json();
       await this.setUser(user);
       await this.setToken(token);
-      this.$router.push("/");
+      this.$router.push("/home");
     }
   }
 };

@@ -14,6 +14,7 @@
       <button type="submit">Register</button>
     </form>
   </div>
+  <p>Si vous avez déjà un compte <router-link to="/"><button>Login</button></router-link></p>
 </template>
 <script>
 

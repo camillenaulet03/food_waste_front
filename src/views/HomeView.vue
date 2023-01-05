@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h1>Welcome</h1>
-    <router-link to="/login"><button>Login</button></router-link>
-    <router-link to="/register"><button>Register</button></router-link>
+
     <button @click="logout">Logout</button>
   </div>
 </template>
@@ -11,7 +9,8 @@
 import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["isLoggedIn"])
+    ...mapGetters(["isLoggedIn"]),
+    ...mapGetters(["getUser"]),
   },
   methods: {
     async logout() {
@@ -21,8 +20,8 @@ export default {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user: this.getUser(),
-          token: this.getToken()
+          user: this.getUser,
+          token: this.getToken
         }),
       });
       this.$router.push("/");
@@ -30,3 +29,4 @@ export default {
   }
 };
 </script>
+
