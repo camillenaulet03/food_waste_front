@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import HomeView from '../views/HomeView.vue'
+import WasteView from '../views/WasteView.vue'
+import store from '../store';
 
 const routes = [
   {
@@ -17,9 +19,21 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => HomeView
+    component: () => HomeView,
+    beforeEnter: (to, from, next) => beforeEnter(to, from, next)
+  },
+  {
+    path: '/createwaste',
+    name: 'waste',
+    component: () => WasteView,
+    beforeEnter: (to, from, next) => beforeEnter(to, from, next)
   }
 ]
+
+function beforeEnter(to, from, next) {
+  if (store.getters.isLoggedIn) next();
+  else next('/');
+}
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
