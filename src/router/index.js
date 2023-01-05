@@ -23,7 +23,7 @@ const routes = [
     beforeEnter: (to, from, next) => beforeEnter(to, from, next)
   },
   {
-    path: '/createwaste',
+    path: '/waste',
     name: 'waste',
     component: () => WasteView,
     beforeEnter: (to, from, next) => beforeEnter(to, from, next)

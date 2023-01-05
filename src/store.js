@@ -10,6 +10,8 @@ const store = createStore({
     state: {
         user: null,
         token: null,
+        id: null,
+        action: null,
     },
     mutations: {
         setUser(state, user) {
@@ -19,6 +21,14 @@ const store = createStore({
         setToken(state, token) {
             state.token = token;
         },
+
+        setId(state, id) {
+            state.id = id;
+        },
+
+        setAction(state, action) {
+            state.action = action;
+        }
     },
     actions: {},
     getters: {
@@ -32,6 +42,14 @@ const store = createStore({
 
         getToken(state) {
             return state.token;
+        },
+
+        getId(state) {
+            return state.id;
+        },
+
+        getAction(state) {
+            return state.action;
         }
     },
 });

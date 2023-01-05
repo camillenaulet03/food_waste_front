@@ -2,15 +2,25 @@
   <HeaderComponent></HeaderComponent>
   <div class="choice">
     <p style="font-weight: bold">Tous les déchets</p>
-    <p><router-link to="/createwaste"><button>Créer un nouveau déchet</button></router-link></p>
+    <p><button @click="createWaste()">Créer un nouveau déchet</button></p>
   </div>
   <div class="wastes">
     <table v-for="(waste, key) in wastes" v-bind:key="key">
-      <tr>Compagnie - {{waste.issuing_company}}</tr>
-      <tr>Nom - {{waste.label}}</tr>
-      <tr>Quantité - {{waste.quantity}}</tr>
-      <tr v-if="waste.is_collected">Collectable - Oui</tr>
-      <tr v-else>Collectable - Non</tr>
+      <tr>
+        <td>Compagnie - {{waste.issuing_company}}</td>
+        <td><button @click="updateWaste(waste._id)">Modifier</button></td>
+      </tr>
+      <tr>
+        <td>Nom - {{waste.label}}</td>
+        <td><button @click="deleteWaste(waste._id)">Supprimer</button></td>
+      </tr>
+      <tr>
+        <td>Quantité - {{waste.quantity}}</td>
+      </tr>
+      <tr>
+        <td v-if="waste.is_collected">Collectable - Oui</td>
+        <td v-else>Collectable - Non</td>
+      </tr>
     </table>
   </div>
 </template>
@@ -31,7 +41,7 @@ export default {
     this.wastes = await this.getWaste();
   },
   methods: {
-    ...mapMutations(["setUser", "setToken"]),
+    ...mapMutations(["setUser", "setToken", "setAction", "setId"]),
     async logout() {
       await fetch("http://localhost:8080/api/auth/logout", {
         method: "POST",
@@ -49,6 +59,21 @@ export default {
     },
     async getWaste() {
       return await fetch("http://localhost:8080/api/wastes").then(response => response.json()).then(data => {return data});
+    },
+    async deleteWaste(id) {
+      await fetch("http://localhost:8080/api/wastes/"+id, {
+        method: "DELETE"
+      })
+      this.wastes = await this.getWaste();
+    },
+    createWaste() {
+      this.setAction('create');
+      this.$router.push('/waste');
+    },
+    updateWaste(id) {
+      this.setAction('update');
+      this.setId(id);
+      this.$router.push('/waste');
     }
   }
 };
