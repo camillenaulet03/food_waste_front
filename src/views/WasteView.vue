@@ -34,6 +34,16 @@
         <input type="submit" @click="onEdit" value="Modifier">
       </div>
     </form>
+    <div v-if="action === 'update'" class="substract">
+      <p>Soustraire deux nombres</p>
+      <input class="number" type="number" v-model="number1" />
+      <p> - </p>
+      <input class="number" type="number" v-model="number2" />
+      <input type="submit" @click="substract" value="Soustraire">
+    </div>
+    <div v-if="result">
+      <p>Résultat de la soustraction: {{result}}</p>
+    </div>
   </div>
 </template>
 
@@ -51,7 +61,10 @@ export default {
       is_collected : false,
       id: null,
       action: null,
-      waste: null
+      waste: null,
+      number1: null,
+      number2: null,
+      result: null
     }
   },
   components: {
@@ -125,6 +138,23 @@ export default {
       const json = await response.json();
       if (response.status === 200) return json;
       else this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
+    },
+    async substract() {
+      const toast = useToast();
+      const response = await fetch("http://localhost:8080/soap/substract", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          number1: this.number1,
+          number2: this.number2
+        }),
+      });
+      if (response.status === 200) this.result = await response.json()
+      else {
+        toast.error("La sustraction n'a pas pu être effectuée", {position: POSITION.BOTTOM_RIGHT});
+      }
     }
   }
 };
@@ -155,6 +185,19 @@ form {
 
 input {
   margin-top: 2em;
+}
+
+.substract {
+  margin-top: 2em;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.number {
+  width: 10%;
 }
 </style>
 
