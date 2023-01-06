@@ -6,7 +6,7 @@
       <p v-else style="font-weight: bold">Modifier un déchet</p>
       <p><router-link to="/home"><button>Tous les déchets</button></router-link></p>
     </div>
-    <form>
+    <form onsubmit="return false;">
       <div class="form">
         <label>Nom du déchet</label>
         <input type="text" v-model="label" />
@@ -28,10 +28,10 @@
         <input type="checkbox" v-model="is_collected" />
       </div>
       <div v-if="action === 'create'">
-        <input type="submit" @click="onSubmit()" value="Envoyer">
+        <input type="submit" @click="onSubmit" value="Envoyer">
       </div>
       <div v-else>
-        <input type="submit" @click="onEdit()" value="Modifier">
+        <input type="submit" @click="onEdit" value="Modifier">
       </div>
     </form>
   </div>
@@ -40,6 +40,7 @@
 <script>
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import {mapGetters} from "vuex";
+import {useToast, POSITION} from "vue-toastification";
 export default {
   data() {
     return {
@@ -63,45 +64,67 @@ export default {
     this.id = this.getId;
     this.action = this.getAction;
     if (this.action === "update") this.waste = await this.getWaste();
+    const date = new Date(this.waste.expiration_date);
     this.label = this.waste.label;
     this.issuing_company = this.waste.issuing_company;
     this.quantity = this.waste.quantity;
-    this.expiration_date = this.waste.expiration_date;
+    this.expiration_date = date.getUTCFullYear() + '-' + date.getUTCMonth() + 1 + '-' + date.getUTCDate();
     this.is_collected = this.waste.is_collected;
   },
   methods: {
     async onSubmit() {
-      await fetch("http://localhost:8080/api/wastes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          label: this.label,
-          issuing_company: this.issuing_company,
-          quantity: this.quantity,
-          expiration_date: this.expiration_date,
-          is_collected: this.is_collected,
-        }),
-      });
+      const toast = useToast();
+      if (this.label === null || this.issuing_company === null || this.quantity === null || this.expiration_date === null) toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
+      else {
+        const response = await fetch("http://localhost:8080/api/wastes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            label: this.label,
+            issuing_company: this.issuing_company,
+            quantity: this.quantity,
+            expiration_date: this.expiration_date,
+            is_collected: this.is_collected,
+          }),
+        });
+        if (response.status === 200) toast.success('Le déchet a été créé', {position: POSITION.BOTTOM_RIGHT});
+        else {
+          const json = await response.json();
+          this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
+        }
+      }
     },
     async onEdit() {
-      await fetch("http://localhost:8080/api/wastes/"+this.id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          label: this.label,
-          issuing_company: this.issuing_company,
-          quantity: this.quantity,
-          expiration_date: this.expiration_date,
-          is_collected: this.is_collected,
-        }),
-      });
+      const toast = useToast();
+      if (this.label === '' || this.issuing_company === '' || this.quantity === '' || this.expiration_date === '') toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
+      else {
+        const response = await fetch("http://localhost:8080/api/wastes/"+this.id, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            label: this.label,
+            issuing_company: this.issuing_company,
+            quantity: this.quantity,
+            expiration_date: this.expiration_date,
+            is_collected: this.is_collected,
+          }),
+        });
+        if (response.status === 200) toast.success('Le déchet a été modifié', {position: POSITION.BOTTOM_RIGHT});
+        else {
+          const json = await response.json();
+          this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
+        }
+      }
     },
     async getWaste() {
-      return await fetch("http://localhost:8080/api/wastes/"+this.id).then(response => response.json()).then(data => {return data});
+      const response = await fetch("http://localhost:8080/api/wastes/"+this.id);
+      const json = await response.json();
+      if (response.status === 200) return json;
+      else this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
     }
   }
 };

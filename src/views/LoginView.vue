@@ -2,46 +2,72 @@
   <div>
     <h1>LOGIN</h1>
     <form @submit.prevent="login">
-      <input v-model="username" placeholder="username" />
+      <input v-model="username" placeholder="Nom" />
       <br />
       <br />
-      <input v-model="password" placeholder="password" type="password" />
+      <input v-model="password" placeholder="Mot de passe" type="password" />
       <br />
       <br />
-      <button type="submit">Login</button>
+      <button type="submit">Connexion</button>
     </form>
   </div>
-  <p>Si vous n'avez pas de compte <router-link to="/register"><button>Register</button></router-link></p>
+  <p>Si vous n'avez pas de compte <router-link to="/register"><button>S'inscrire</button></router-link></p>
 </template>
 <script>
 
-import { mapMutations } from "vuex";
+import {mapGetters, mapMutations} from "vuex";
+import { useToast, POSITION } from 'vue-toastification'
 
 export default {
   data: () => {
     return {
-      username: "",
-      password: "",
+      username: null,
+      password: null,
+      toast: useToast(),
+      position: POSITION
     };
   },
+  computed: {
+    ...mapGetters(["getToast"]),
+  },
+  async mounted() {
+    this.message = this.getToast;
+    if (this.message !== null) {
+      // eslint-disable-next-line no-unused-vars
+      const POSITION = this.position
+      eval(this.message);
+      await this.resetToast();
+    }
+  },
   methods: {
-    ...mapMutations(["setUser", "setToken"]),
+    ...mapMutations(["setUser", "setToken", "setToast"]),
     async login(e) {
       e.preventDefault();
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-      });
-      const { user, token } = await response.json();
-      await this.setUser(user);
-      await this.setToken(token);
-      this.$router.push("/home");
+      if (this.username === null || this.password === null) this.toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
+      else {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password,
+          }),
+        });
+        if (response.status === 200) {
+          const {user, token} = await response.json();
+          await this.setUser(user);
+          await this.setToken(token);
+          this.$router.push("/home");
+        } else {
+          const json = await response.json();
+          this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
+        }
+      }
+    },
+    async resetToast() {
+      this.setToast(null);
     }
   }
 };

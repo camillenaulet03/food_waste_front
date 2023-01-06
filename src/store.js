@@ -12,6 +12,7 @@ const store = createStore({
         token: null,
         id: null,
         action: null,
+        toast: null
     },
     mutations: {
         setUser(state, user) {
@@ -28,6 +29,10 @@ const store = createStore({
 
         setAction(state, action) {
             state.action = action;
+        },
+
+        setToast(state, toast) {
+            state.toast = toast;
         }
     },
     actions: {},
@@ -50,6 +55,10 @@ const store = createStore({
 
         getAction(state) {
             return state.action;
+        },
+
+        getToast(state) {
+            return state.toast;
         }
     },
 });

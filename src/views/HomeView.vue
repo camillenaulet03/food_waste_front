@@ -28,10 +28,12 @@
 <script>
 import {mapMutations} from "vuex";
 import HeaderComponent from "../components/HeaderComponent.vue"
+import {useToast, POSITION} from "vue-toastification";
 export default {
   data() {
     return {
-      wastes: null
+      wastes: null,
+      toast: useToast()
     }
   },
   components: {
@@ -42,29 +44,27 @@ export default {
   },
   methods: {
     ...mapMutations(["setUser", "setToken", "setAction", "setId"]),
-    async logout() {
-      await fetch("http://localhost:8080/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: this.getUser,
-          token: this.getToken
-        }),
-      });
-      this.setToken(null);
-      this.setUser(null);
-      this.$router.push("/");
-    },
     async getWaste() {
-      return await fetch("http://localhost:8080/api/wastes").then(response => response.json()).then(data => {return data});
+      const response = await fetch("http://localhost:8080/api/wastes");
+      const json = await response.json();
+      if (response.status === 200) {
+        return json;
+      } else {
+        const json = await response.json();
+        this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
+      }
     },
     async deleteWaste(id) {
-      await fetch("http://localhost:8080/api/wastes/"+id, {
+     const response = await fetch("http://localhost:8080/api/wastes/"+id, {
         method: "DELETE"
       })
-      this.wastes = await this.getWaste();
+      if (response.status === 200) {
+        this.toast.success('Le déchet a été supprimé', {position: POSITION.BOTTOM_RIGHT});
+        this.wastes = await this.getWaste();
+      } else {
+        const json = await response.json();
+        this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
+      }
     },
     createWaste() {
       this.setAction('create');
