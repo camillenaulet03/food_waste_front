@@ -9,23 +9,23 @@ const routes = [
   {
     path: '/',
     name: 'login',
-    component: () => LoginView
+    component: LoginView
   },
   {
     path: '/register',
     name: 'register',
-    component: () => RegisterView
+    component: RegisterView
   },
   {
     path: '/home',
     name: 'home',
-    component: () => HomeView,
+    component: HomeView,
     beforeEnter: (to, from, next) => beforeEnter(to, from, next)
   },
   {
     path: '/waste',
     name: 'waste',
-    component: () => WasteView,
+    component: WasteView,
     beforeEnter: (to, from, next) => beforeEnter(to, from, next)
   }
 ]
