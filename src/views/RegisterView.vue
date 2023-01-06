@@ -2,13 +2,13 @@
   <div>
     <h1>Register</h1>
     <form @submit.prevent="register">
-      <input v-model="username" placeholder="Nom" />
+      <input v-model="username" placeholder="Nom" type="text" />
       <br />
       <br />
       <input v-model="password" placeholder="Mot de passe" type="password" />
       <br />
       <br />
-      <input v-model="confirmPassword" placeholder="Confirmation du mot de passe" type="password" />
+      <input v-model="confirmPassword" placeholder="Confirmation mot de passe" type="password" />
       <br />
       <br />
       <button type="submit">S'inscrire</button>

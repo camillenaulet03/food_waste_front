@@ -2,16 +2,16 @@
   <div>
     <h1>LOGIN</h1>
     <form @submit.prevent="login">
-      <input v-model="username" placeholder="Nom" />
+      <input v-model="username" type="text" placeholder="Nom" />
       <br />
       <br />
       <input v-model="password" placeholder="Mot de passe" type="password" />
       <br />
       <br />
-      <button type="submit">Connexion</button>
+      <input type="submit" value="Connexion" />
     </form>
   </div>
-  <p>Si vous n'avez pas de compte <router-link to="/register"><button>S'inscrire</button></router-link></p>
+  <p>Si vous n'avez pas de compte <router-link to="/register"><input type="submit" value="S'inscrire" /></router-link></p>
 </template>
 <script>
 

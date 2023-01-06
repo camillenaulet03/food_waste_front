@@ -98,10 +98,16 @@ export default {
 }
 
 table {
-  border: ridge;
+  border-radius: 8px;
+  border: 1px black solid;
   width: 30%;
   text-align: center;
   margin-bottom: 2em;
+  padding: 1% 0;
+}
+
+td {
+  height: 30px;
 }
 
 .choice {

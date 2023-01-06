@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <div>
-      <p>Vous êtes connecté en tant que {{username}}</p>
+      <p>Vous êtes connecté en tant que <b>{{username}}</b></p>
     </div>
     <div>
       <button @click="logout">Logout</button>
@@ -64,5 +64,6 @@ export default {
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
+  padding: 0 5%;
 }
 </style>
