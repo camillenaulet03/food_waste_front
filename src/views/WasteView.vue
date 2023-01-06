@@ -64,18 +64,22 @@ export default {
       waste: null,
       number1: null,
       number2: null,
-      result: null
+      result: null,
+      username: null,
+      token: null
     }
   },
   components: {
     HeaderComponent
   },
   computed: {
-    ...mapGetters(["getId", "getAction"]),
+    ...mapGetters(["getId", "getAction", "getUser", "getToken"]),
   },
   async mounted() {
     this.id = this.getId;
     this.action = this.getAction;
+    this.username = await this.getUser.username;
+    this.token = await this.getToken;
     if (this.action === "update") this.waste = await this.getWaste();
     const date = new Date(this.waste.expiration_date);
     this.label = this.waste.label;
@@ -93,6 +97,8 @@ export default {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "username": this.username,
+            "token": this.token
           },
           body: JSON.stringify({
             label: this.label,
@@ -117,6 +123,8 @@ export default {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "username": this.username,
+            "token": this.token
           },
           body: JSON.stringify({
             label: this.label,
@@ -134,7 +142,13 @@ export default {
       }
     },
     async getWaste() {
-      const response = await fetch("http://localhost:8080/api/wastes/"+this.id);
+      const response = await fetch("http://localhost:8080/api/wastes/"+this.id, {
+        headers: {
+          "Content-Type": "application/json",
+          "username": this.username,
+          "token": this.token
+        },
+      });
       const json = await response.json();
       if (response.status === 200) return json;
       else this.toast.error(json.message, {position: POSITION.BOTTOM_RIGHT});
@@ -145,6 +159,8 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "username": this.username,
+          "token": this.token
         },
         body: JSON.stringify({
           number1: this.number1,

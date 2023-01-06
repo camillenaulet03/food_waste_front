@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <div>
-      <p>Vous êtes connecté en tant que {{user}}</p>
+      <p>Vous êtes connecté en tant que {{username}}</p>
     </div>
     <div>
       <button @click="logout">Logout</button>
@@ -16,15 +16,18 @@ export default {
   name: "HeaderComponent",
   data() {
     return {
+      username: null,
+      token: null,
       user: null
     }
   },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["getUser", "getToken"]),
   },
   async mounted() {
-    this.user = this.getUser;
-    this.user = this.user.username;
+    this.username = await this.getUser.username;
+    this.token = await this.getToken;
+    this.user = await this.getUser;
   },
   methods: {
     ...mapMutations(["setUser", "setToken", "setToast"]),
@@ -34,10 +37,12 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "username": this.username,
+          "token": this.token
         },
         body: JSON.stringify({
-          user: this.getUser,
-          token: this.getToken
+          user: this.user,
+          token: this.token
         }),
       });
       if (response.status === 200) {
