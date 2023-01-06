@@ -63,4 +63,4 @@ Une fois l'application lancé, vous n'avez plus qu'a vous rendre sur : [http://l
 
 Le site est disponible à l'adresse [https://stately-sawine-318119.netlify.app/](https://stately-sawine-318119.netlify.app/)
 
-Cependant comme le (back)[https://github.com/camillenaulet03/food_waste_back] n'est pas déployer, il ne fonstionne pas.
+Cependant comme le [back](https://github.com/camillenaulet03/food_waste_back) n'est pas déployé, il ne fonstionne pas.
