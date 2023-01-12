@@ -93,7 +93,7 @@ export default {
       const toast = useToast();
       if (this.label === null || this.issuing_company === null || this.quantity === null || this.expiration_date === null) toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
       else {
-        const response = await fetch("http://localhost:8080/api/wastes", {
+        const response = await fetch(process.env.VUE_APP_ENV+"/api/wastes", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export default {
       const toast = useToast();
       if (this.label === '' || this.issuing_company === '' || this.quantity === '' || this.expiration_date === '') toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
       else {
-        const response = await fetch("http://localhost:8080/api/wastes/"+this.id, {
+        const response = await fetch(process.env.VUE_APP_ENV+"/api/wastes/"+this.id, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -142,7 +142,7 @@ export default {
       }
     },
     async getWaste() {
-      const response = await fetch("http://localhost:8080/api/wastes/"+this.id, {
+      const response = await fetch(process.env.VUE_APP_ENV+"/api/wastes/"+this.id, {
         headers: {
           "Content-Type": "application/json",
           "username": this.username,
@@ -155,7 +155,7 @@ export default {
     },
     async substract() {
       const toast = useToast();
-      const response = await fetch("http://localhost:8080/soap/substract", {
+      const response = await fetch(process.env.VUE_APP_ENV+"/soap/substract", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

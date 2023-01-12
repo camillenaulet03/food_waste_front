@@ -33,7 +33,7 @@ export default {
     ...mapMutations(["setUser", "setToken", "setToast"]),
     async logout() {
       const toast = useToast();
-      const response = await fetch("http://localhost:8080/api/auth/logout", {
+      const response = await fetch(process.env.VUE_APP_ENV+"/api/auth/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

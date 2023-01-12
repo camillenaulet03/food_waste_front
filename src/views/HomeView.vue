@@ -65,7 +65,7 @@ export default {
     ...mapMutations(["setUser", "setToken", "setAction", "setId"]),
     ...mapGetters(["getUser", "getToken"]),
     async getWaste() {
-      const response = await fetch("http://localhost:8080/api/wastes", {
+      const response = await fetch(process.env.VUE_APP_ENV+"/api/wastes", {
         headers: {
           username: this.username,
           token: this.token,
@@ -80,7 +80,7 @@ export default {
       }
     },
     async findWastes(labelOfWaste) {
-      const response = await fetch("http://localhost:8080/api/wastes/find", {
+      const response = await fetch(process.env.VUE_APP_ENV+"/api/wastes/find", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export default {
       }
     },
     async deleteWaste(id) {
-      const response = await fetch("http://localhost:8080/api/wastes/" + id, {
+      const response = await fetch(process.env.VUE_APP_ENV+"/api/wastes/" + id, {
         method: "DELETE",
         headers: {
           username: this.username,

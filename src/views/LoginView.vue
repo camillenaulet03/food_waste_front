@@ -45,7 +45,7 @@ export default {
       e.preventDefault();
       if (this.username === null || this.password === null) this.toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
       else {
-        const response = await fetch("http://localhost:8080/api/auth/login", {
+        const response = await fetch(process.env.VUE_APP_ENV+"/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

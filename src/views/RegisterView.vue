@@ -37,7 +37,7 @@ export default {
       if (this.username === null || this.password === null || this.confirmPassword === null) toast.error('Tous les champs doivent être remplis', {position: POSITION.BOTTOM_RIGHT});
       else if (this.password !== this.confirmPassword) toast.error('Les champs mot de passe et confirmation du mot de passe sont différents', {position: POSITION.BOTTOM_RIGHT});
       else {
-        const response = await fetch("http://localhost:8080/api/auth/signup", {
+        const response = await fetch(process.env.VUE_APP_ENV+"/api/auth/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
