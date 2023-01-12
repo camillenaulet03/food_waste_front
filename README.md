@@ -54,6 +54,9 @@ Une fois cela fait, rentrez dans le fichier créé et exécutez les commandes su
 ```sh
 npm install
 ```
+```sh
+npm run serve
+```
 
 Une fois l'application lancé, vous n'avez plus qu'a vous rendre sur : [http://localhost:8081/](http://localhost:8081/)
 
